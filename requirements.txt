@@ -1,0 +1,8 @@
+python-telegram-bot==13.9
+selenium
+Pillow
+webdriver_manager
+seleniumbase
+urllib3
+undetected-chromedriver
+blinker
