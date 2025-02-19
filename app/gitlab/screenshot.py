@@ -8,43 +8,47 @@ from app.constants.constants import GITLAB_URL, GITLAB_USERNAME, GITLAB_PASSWORD
 from app.webdriver.webdriver import driver
 
 
-def get_gitlab_screenshot():
+class Gitlab:
+    def __init__(self):
+        self._driver = driver
 
-    try:
-
-        driver.uc_open_with_reconnect(GITLAB_URL, 4)
-        driver.uc_gui_click_captcha()
-
-        wait = WebDriverWait(driver, 5)
+    def get_gitlab_screenshot(self):
 
         try:
-            checkbox = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "ctp-checkbox-label")))
-            driver.execute_script("arguments[0].click();", checkbox)
-            print("Clicked Cloudflare checkbox!")
-        except:
-            print("Cloudflare checkbox not found, continuing...")
+
+            self._driver.uc_open_with_reconnect(GITLAB_URL, 4)
+            self._driver.uc_gui_click_captcha()
+
+            wait = WebDriverWait(driver, 5)
+
+            try:
+                checkbox = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "ctp-checkbox-label")))
+                self._driver.execute_script("arguments[0].click();", checkbox)
+                print("Clicked Cloudflare checkbox!")
+            except:
+                print("Cloudflare checkbox not found, continuing...")
 
 
 
-        wait.until(EC.presence_of_element_located((By.ID, "user_login")))
-        print("Login page loaded!")
+            wait.until(EC.presence_of_element_located((By.ID, "user_login")))
+            print("Login page loaded!")
 
-        username_field = driver.find_element(By.ID, 'user_login')
-        password_field = driver.find_element(By.ID, 'user_password')
-        login_button = driver.find_element(By.CSS_SELECTOR, '[data-testid="sign-in-button"]')
+            username_field = self._driver.find_element(By.ID, 'user_login')
+            password_field = self._driver.find_element(By.ID, 'user_password')
+            login_button = self._driver.find_element(By.CSS_SELECTOR, '[data-testid="sign-in-button"]')
 
-        username_field.send_keys(GITLAB_USERNAME)
-        password_field.send_keys(GITLAB_PASSWORD)
-        login_button.click()
+            username_field.send_keys(GITLAB_USERNAME)
+            password_field.send_keys(GITLAB_PASSWORD)
+            login_button.click()
 
-        time.sleep(5)
+            time.sleep(5)
 
-        screenshot = driver.get_screenshot_as_png()
+            screenshot = self._driver.get_screenshot_as_png()
 
-        image = Image.open(io.BytesIO(screenshot))
-        return image
+            image = Image.open(io.BytesIO(screenshot))
+            return image
 
-    except Exception as e:
-        raise Exception(f"Error during GitLab login and screenshot: {e}")
-    finally:
-        driver.quit()
+        except Exception as e:
+            raise Exception(f"Error during GitLab login and screenshot: {e}")
+        finally:
+            self._driver.quit()
