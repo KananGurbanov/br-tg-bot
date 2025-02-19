@@ -1,54 +1,49 @@
 import time
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from PIL import Image
 import io
-from selenium.webdriver.support.wait import WebDriverWait
-from app.constants.constants import GITLAB_URL, GITLAB_USERNAME, GITLAB_PASSWORD
+from app.constants.constants import TARGET_URL, TARGET_USERNAME, \
+    TARGET_PASSWORD
 from app.webdriver.webdriver import driver
 
 
-class Gitlab:
+class HD_Film_Cehennemi:
+
     def __init__(self):
         self._driver = driver
 
-    def get_gitlab_screenshot(self):
+    def get_hd_film_cehennemi_screenshot(self):
 
         try:
 
-            self._driver.uc_open_with_reconnect(GITLAB_URL, 4)
-            self._driver.uc_gui_click_captcha()
+            self._driver.get(TARGET_URL)
 
-            wait = WebDriverWait(driver, 5)
+            time.sleep(2)
 
-            try:
-                checkbox = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "ctp-checkbox-label")))
-                self._driver.execute_script("arguments[0].click();", checkbox)
-                print("Clicked Cloudflare checkbox!")
-            except:
-                print("Cloudflare checkbox not found, continuing...")
+            login_button = self._driver.find_element(By.CSS_SELECTOR, "button.login[aria-label='Login']")
 
-
-
-            wait.until(EC.presence_of_element_located((By.ID, "user_login")))
-            print("Login page loaded!")
-
-            username_field = self._driver.find_element(By.ID, 'user_login')
-            password_field = self._driver.find_element(By.ID, 'user_password')
-            login_button = self._driver.find_element(By.CSS_SELECTOR, '[data-testid="sign-in-button"]')
-
-            username_field.send_keys(GITLAB_USERNAME)
-            password_field.send_keys(GITLAB_PASSWORD)
             login_button.click()
 
-            time.sleep(5)
+            time.sleep(2)
+
+            username_input = driver.find_element(By.ID, "loginUsername")
+            username_input.send_keys(TARGET_USERNAME)
+
+            password_input = driver.find_element(By.ID, "loginPassword")
+            password_input.send_keys(TARGET_PASSWORD)
+
+            login_button = driver.find_element(By.XPATH, "//button[@type='submit' and contains(text(), 'Giriş Yap')]")
+            login_button.click()
+
+            time.sleep(2)
 
             screenshot = self._driver.get_screenshot_as_png()
 
             image = Image.open(io.BytesIO(screenshot))
             return image
 
+
         except Exception as e:
-            raise Exception(f"Error during GitLab login and screenshot: {e}")
+            raise Exception(f"Error during hd film cehennemi: {e}")
         finally:
             self._driver.quit()
