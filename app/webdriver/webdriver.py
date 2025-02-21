@@ -1,9 +1,15 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--disable-gpu")
 chrome_options.add_argument("--window-size=1920x1080")
+chrome_options.add_argument("--no-sandbox")
 
-driver = webdriver.Chrome(options=chrome_options)
+chrome_options.binary_location = "/usr/bin/chromium"
+
+chrome_driver_service = Service(executable_path="/usr/bin/chromedriver")
+
+driver = webdriver.Chrome(service=chrome_driver_service, options=chrome_options)
