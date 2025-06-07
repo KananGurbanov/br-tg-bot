@@ -8,8 +8,8 @@ chrome_options.add_argument("--headless=new")
 chrome_options.add_argument("--disable-gpu")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--window-size=1920,1080")
-chrome_options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
+# chrome_options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
 
-chrome_service = Service("/usr/bin/chromedriver")  # Explicit chromedriver path
+# chrome_service = Service("/usr/bin/chromedriver")  # Explicit chromedriver path
 
-driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+driver = webdriver.Chrome( options=chrome_options)
