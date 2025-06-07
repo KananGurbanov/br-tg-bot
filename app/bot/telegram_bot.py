@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import CallbackContext
 from io import BytesIO
 
-from app.gitlab.screenshot import HD_Film_Cehennemi
+from app.hd_film_cehennemi.screenshot import HD_Film_Cehennemi
 
 
 def start(update: Update, context: CallbackContext):
